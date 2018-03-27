@@ -47,7 +47,6 @@ myLayout =
   tiled  = name "tiled" $ Tall 1 (3 / 100) (3 / 5)
   tabbed = name "tabbed" simpleTabbed
   full   = name "full" Full
-
   name n = renamed [Replace n] . smartBorders
 
 myManageHook =
@@ -103,6 +102,9 @@ defaults =
                      , ( (myModMask, xK_v)
                        , namedScratchpadAction scratchpads "viber"
                        )
+                     , ( (myModMask, xK_h)
+                       , namedScratchpadAction scratchpads "htop"
+                       )
                      , ((mod4Mask, xK_p), spawn "mpc toggle")
                      , ((mod4Mask, xK_x), spawn "pactl set-sink-volume 0 +5%")
                      , ((mod4Mask, xK_z), spawn "pactl set-sink-volume 0 -5%")
@@ -113,14 +115,16 @@ defaults =
 
 scratchpads =
   [ NS "ncmpcpp"
-       "urxvtcd -e ncmpcpp"
+       (myTerminal ++ "-e ncmpcpp")
        (title =? "ncmpcpp")
-       (customFloating $ W.RationalRect (1 / 6) (1 / 6) (2 / 3) (2 / 3))
-  , NS "viber"
-       "viber"
-       (className =? "ViberPC")
-       (customFloating $ W.RationalRect (1 / 6) (1 / 6) (2 / 3) (2 / 3))
+       (customFloating someCenter)
+  , NS "viber" "viber" (className =? "ViberPC") (customFloating someCenter)
+  , NS "htop"
+       (myTerminal ++ " -e htop")
+       (title =? "htop")
+       (customFloating someCenter)
   ]
+  where someCenter = W.RationalRect (1 / 6) (1 / 6) (2 / 3) (2 / 3)
 
 main :: IO ()
 main = do
